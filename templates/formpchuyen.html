@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Nhập Dữ Liệu</title>
+    <title>Form nhập phiếu chuyển</title>
     <style>
         body {
             font-family: 'Times New Roman', Times, serif;
@@ -59,39 +59,63 @@
         input[type="submit"]:hover {
             background-color: #45a049;
         }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .page-description {
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <form method="POST" id="myForm">
+        <form method="POST" id="myForm" action="/form2">
+            
             <div class="form-group">
-                <label for="wr">V/v:</label>
-                <input type="text" id="wr" name="wr" required>
+                <label for="wr">Về việc:</label>
+                <textarea id="wr" name="wr" required>{{ request.form.get('wr', '') }}</textarea>
             </div>
             <div class="form-group">
                 <label for="dob">Ngày:</label>
-                <input type="text" id="dob" name="dob" required>
+                <input type="text" id="dob" name="dob" required value="{{ request.form.get('dob', '') }}">
             </div>
             <div class="form-group">
                 <label for="send">Kính gửi:</label>
-                <input type="text" id="send" name="send" required>
+                <input type="text" id="send" name="send" required value="{{ request.form.get('send', '') }}">
             </div>
             <div class="form-group">
                 <label for="cont">Nội dung:</label>
-                <textarea id="cont" name="cont" required></textarea>
+                <textarea id="cont" name="cont" required>{{ request.form.get('cont', '') }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="gift">Nơi nhận:</label>
+                <textarea id="gift" name="gift" required>{{ request.form.get('gift', '') }}</textarea>
             </div>
             <div class="form-group">
                 <label for="from">Tên vị trí:</label>
-                <input type="text" id="from" name="from" required>
+                <input type="text" id="from" name="from" required value="{{ request.form.get('from', '') }}">
             </div>
             <div class="form-group">
                 <label for="to">Tên:</label>
-                <input type="text" id="to" name="to" required>
+                <input type="text" id="to" name="to" required value="{{ request.form.get('to', '') }}">
             </div>
             <input type="submit" value="Gửi">
+            <button type="button" class="excel-button" onclick="exportExcel()">Xuất Excel</button>
         </form>
     </div>
+    <div class="page-description">Form nhập phiếu chuyển</div>
     <script>
+        function exportExcel() {
+            const form = document.getElementById('myForm');
+            form.action = '/export_excel';
+            form.method = 'POST';
+            form.submit();
+        }
         document.addEventListener('DOMContentLoaded', function() {
             const textareas = document.querySelectorAll('textarea');
 

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Nhập Dữ Liệu</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 1000px;
+        }
+        form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .form-group input[type="text"],
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            resize: none;
+        }
+        .form-group textarea {
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form method="POST" id="myForm" action="/form1">
+            <div class="heading">Khu công nghệ cao</div>
+            <div class="form-group">
+                <label for="wr">Về việc:</label>
+                <textarea id="wr" name="wr" required>{{ request.form.get('wr', '') }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="dob">Ngày:</label>
+                <input type="text" id="dob" name="dob" required value="{{ request.form.get('dob', '') }}">
+            </div>
+            <div class="form-group">
+                <label for="send">Kính gửi:</label>
+                <input type="text" id="send" name="send" required value="{{ request.form.get('send', '') }}">
+            </div>
+            <div class="form-group">
+                <label for="cont">Nội dung:</label>
+                <textarea id="cont" name="cont" required>{{ request.form.get('cont', '') }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="gift">Nơi nhận:</label>
+                <textarea id="gift" name="gift" required>{{ request.form.get('gift', '') }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="from">Tên vị trí:</label>
+                <input type="text" id="from" name="from" required value="{{ request.form.get('from', '') }}">
+            </div>
+            <div class="form-group">
+                <label for="to">Tên:</label>
+                <input type="text" id="to" name="to" required value="{{ request.form.get('to', '') }}">
+            </div>
+            <input type="submit" value="Gửi">
+            <button type="button" class="excel-button" onclick="exportExcelForm1()">Xuất Excel</button>
+        </form>
+    </div>
+    <script>
+        function exportExcelForm1() {
+            const form = document.getElementById('myForm');
+            form.action = '/export_excel_form1';
+            form.method = 'POST';
+            form.submit();
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const textareas = document.querySelectorAll('textarea');
+
+            const adjustHeight = (textarea) => {
+                textarea.style.height = 'auto';
+                textarea.style.height = textarea.scrollHeight + 'px';
+            }
+
+            textareas.forEach(textarea => {
+                textarea.addEventListener('input', () => adjustHeight(textarea));
+                adjustHeight(textarea);
+            });
+        });
+        document.getElementById('myForm').addEventListener('submit', function(event) {
+            const textareas = document.querySelectorAll('textarea');
+            textareas.forEach(textarea => {
+                textarea.value = textarea.value.replace(/\n/g, '\r\n');
+            });
+        });
+    </script>
+</body>
+</html>
