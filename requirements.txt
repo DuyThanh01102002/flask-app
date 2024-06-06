@@ -1,0 +1,4 @@
+Flask>=2.2.2,<3.0.0
+docx>=0.17
+openpyxl>=3.0.9
+DateTime
